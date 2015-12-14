@@ -18,7 +18,7 @@ Data Preprocessing
   
   _library(corrplot)_
 
-Data Loading
+Data Loading 
 
   trainFile <- "./data/pml-training.csv"
   testFile  <- "./data/pml-testing.csv"
