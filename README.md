@@ -20,26 +20,21 @@ In this project, we will use data from accelerometers on the belt, forearm, arm,
 
 <h2> Data Loading </h2> 
 
-  trainFile <- "./data/pml-training.csv"
-  testFile  <- "./data/pml-testing.csv"
-  if (!file.exists("./data")) {
-    dir.create("./data")
-  }
-  if (!file.exists(trainFile)) {
-    download.file(trainUrl, destfile=trainFile, method="curl")
-  }
-  if (!file.exists(testFile)) {
-    download.file(testUrl, destfile=testFile, method="curl")
-  }
+  _trainFile <- "./data/pml-training.csv"_
+  
+  _testFile  <- "./data/pml-testing.csv"_
   
 <h2> Data Reading </h2> 
 
 After downloading the data from the data source, we can read the two csv files into two data frames.
 
-  trainRaw <- read.csv("./data/pml-training.csv")
-  testRaw <- read.csv("./data/pml-testing.csv")
-  dim(trainRaw)
-  dim(testRaw)
+  _trainRaw <- read.csv("./data/pml-training.csv")_
+  
+  _testRaw <- read.csv("./data/pml-testing.csv")_
+  
+  _dim(trainRaw)_
+  
+  _dim(testRaw)_
 
 The training data set contains 19622 observations and 160 variables, while the testing data set contains 20 observations and 160 variables. The "classe" variable in the training set is the outcome to predict.
 
