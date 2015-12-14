@@ -8,11 +8,11 @@ In this project, we will use data from accelerometers on the belt, forearm, arm,
 
 Data Preprocessing
 
-  `*library(caret)*`
-  `*library(rpart)*`
-  `*library(rpart.plot)*`
-  `*library(randomForest)*`
-  `*library(corrplot)*`
+  `library(caret)
+  library(rpart)
+  library(rpart.plot)
+  library(randomForest)
+  library(corrplot)`
 
 Data Loading
 
