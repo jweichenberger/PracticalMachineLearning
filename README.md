@@ -42,23 +42,31 @@ The training data set contains 19622 observations and 160 variables, while the t
 
 In this step, we will clean the data and get rid of observations with missing values as well as some meaningless variables.
 
-  sum(complete.cases(trainRaw))
+  _sum(complete.cases(trainRaw))_
   
 First, we remove columns that contain NA missing values.
 
-  trainRaw <- trainRaw[, colSums(is.na(trainRaw)) == 0] 
-  testRaw <- testRaw[, colSums(is.na(testRaw)) == 0] 
+  _trainRaw <- trainRaw[, colSums(is.na(trainRaw)) == 0]_
+  
+  _testRaw <- testRaw[, colSums(is.na(testRaw)) == 0]_ 
   
 Next, we get rid of some columns that do not contribute much to the accelerometer measurements.
 
-  classe <- trainRaw$classe
-  trainRemove <- grepl("^X|timestamp|window", names(trainRaw))
-  trainRaw <- trainRaw[, !trainRemove]
-  trainCleaned <- trainRaw[, sapply(trainRaw, is.numeric)]
-  trainCleaned$classe <- classe
-  testRemove <- grepl("^X|timestamp|window", names(testRaw))
-  testRaw <- testRaw[, !testRemove]
-  testCleaned <- testRaw[, sapply(testRaw, is.numeric)]
+  _classe <- trainRaw$classe_
+  
+  _trainRemove <- grepl("^X|timestamp|window", names(trainRaw))_
+  
+  _trainRaw <- trainRaw[, !trainRemove]_
+  
+  _trainCleaned <- trainRaw[, sapply(trainRaw, is.numeric)]_
+
+  _trainCleaned$classe <- classe_
+
+  _testRemove <- grepl("^X|timestamp|window", names(testRaw))_
+
+  _testRaw <- testRaw[, !testRemove]_
+
+  _testCleaned <- testRaw[, sapply(testRaw, is.numeric)]_
   
 Now, the cleaned training data set contains 19622 observations and 53 variables, while the testing data set contains 20 observations and 53 variables. The "classe" variable is still in the cleaned training set.
 
@@ -66,27 +74,37 @@ Now, the cleaned training data set contains 19622 observations and 53 variables,
 
 Then, we can split the cleaned training set into a pure training data set (70%) and a validation data set (30%). We will use the validation data set to conduct cross validation in future steps.
 
-  set.seed(22519) # For reproducibile purpose
-  inTrain <- createDataPartition(trainCleaned$classe, p=0.70, list=F)
-  trainData <- trainCleaned[inTrain, ]
-  testData <- trainCleaned[-inTrain, ]
+  _set.seed(22519) # For reproducibile purpose_
+  
+  _inTrain <- createDataPartition(trainCleaned$classe, p=0.70, list=F)_
+  
+  _trainData <- trainCleaned[inTrain, ]_
+  
+  _testData <- trainCleaned[-inTrain, ]_
 
 <h2> Data Modeling </h2> 
 
 We fit a predictive model for activity recognition using Random Forest algorithm because it automatically selects important variables and is robust to correlated covariates & outliers in general. We will use 5-fold cross validation when applying the algorithm.
 
-  controlRf <- trainControl(method="cv", 5)
-  modelRf <- train(classe ~ ., data=trainData, method="rf", trControl=controlRf, ntree=250)
-  modelRf
+  _controlRf <- trainControl(method="cv", 5)_
+  
+  _modelRf <- train(classe ~ ., data=trainData, method="rf", trControl=controlRf, ntree=250)_
+  
+  _modelRf_
   
 Then, we estimate the performance of the model on the validation data set.
 
-  predictRf <- predict(modelRf, testData)
-  confusionMatrix(testData$classe, predictRf)
-  accuracy <- postResample(predictRf, testData$classe)
-  accuracy
-  oose <- 1 - as.numeric(confusionMatrix(testData$classe, predictRf)$overall[1])
-  oose
+  _predictRf <- predict(modelRf, testData)_
+  
+  _confusionMatrix(testData$classe, predictRf)_
+  
+  _accuracy <- postResample(predictRf, testData$classe)_
+  
+  _accuracy_
+  
+  _oose <- 1 - as.numeric(confusionMatrix(testData$classe, predictRf)$overall[1])_
+  
+  _oose_
   
 So, the estimated accuracy of the model is 99.42% and the estimated out-of-sample error is 0.58%.
 
@@ -94,15 +112,20 @@ So, the estimated accuracy of the model is 99.42% and the estimated out-of-sampl
 
 Now, we apply the model to the original testing data set downloaded from the data source. We remove the problem_id column first.
 
-  result <- predict(modelRf, testCleaned[, -length(names(testCleaned))])
-  result
+  _result <- predict(modelRf, testCleaned[, -length(names(testCleaned))])_
+  
+  _result_
 
 <h2> Result Visualization </h2> 
 
 Correlation Matrix Visualization
-  corrPlot <- cor(trainData[, -length(names(trainData))])
-  corrplot(corrPlot, method="color")
+  
+  _corrPlot <- cor(trainData[, -length(names(trainData))])_
+  
+  _corrplot(corrPlot, method="color")_
 
 Decision Tree Visualization
-  treeModel <- rpart(classe ~ ., data=trainData, method="class")
-  prp(treeModel) # fast plot
+  
+  _treeModel <- rpart(classe ~ ., data=trainData, method="class")_
+  
+  _prp(treeModel) # fast plot_
